@@ -5,25 +5,35 @@ class Carousel extends Component {
         active: 0
     }
 
-    static defautProps = {
+    static defaultProps = {
         images: ["http://pets-images.dev-apis.com/pets/none.jpg"]
     }
 
+    handleIndexClick = (event) => {
+        this.setState({
+            //Everything from DOM is a string.
+            active: Number(event.target.dataset.index)
+        });
+    }
 
     render() {
-        const { active } = this.state;
-        const { images } = this.props;
+        const {active} = this.state;
+        const {images} = this.props;
 
         return (
             <div className="carousel">
                 <img src={images[active]} alt="animal hero"/>
                 <div className="carousel-smaller">
                     {
-                        images.map((photo, index) => <img key={photo}
-                                                       src={photo}
-                                                       className={index === active ? "active" : ""}
-                                                       alt="animal thumbnail"
-                                                    />)
+                        images.map((photo, index) =>
+                            <img key={photo}
+                                 onClick={this.handleIndexClick}
+                                 data-index={index}
+                                 src={photo}
+                                 className={index === active ? "active" : ""}
+                                 alt="animal thumbnail"
+                            />
+                        )
                     }
                 </div>
             </div>
