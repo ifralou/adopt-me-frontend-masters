@@ -4,11 +4,13 @@ import {useQuery} from "@tanstack/react-query";
 import fetchPet from "../fetchPet";
 import Carousel from "../Carousel";
 import Modal from "../../Modal";
+import {PetApiResponse} from "../../APIResponseTypes";
 
 const Details = () => {
     const {id} = useParams();
-    const results = useQuery(["details", id], fetchPet);
-    const [showModal, setShowModal] = useState(false);
+
+    const results = useQuery<PetApiResponse>(["details", id], fetchPet);
+    const [showModal, setShowModal] = useState<boolean>(false);
 
     if (results.isLoading) {
         return <div className="loading-pane">
@@ -16,7 +18,10 @@ const Details = () => {
         </div>
     }
 
-    const pet = results.data.pets[0];
+    const pet = results?.data?.pets[0];
+    if (!pet) {
+        throw new Error("No pet lol");
+    }
 
     return (
         <div className="details">
@@ -28,15 +33,16 @@ const Details = () => {
                     <button onClick={() => setShowModal(true)}>Adopt {pet.name}</button>
                     <p>{pet.description}</p>
                     {
-                        showModal ? <Modal>
-                            <div>
-                                <h1>Would you like to adopt {pet.name}?</h1>
-                                <div className="buttons">
-                                    <button>Yes</button>
-                                    <button onClick={() => setShowModal(false)}>No</button>
+                        showModal ? (
+                            <Modal>
+                                <div>
+                                    <h1>Would you like to adopt {pet.name}?</h1>
+                                    <div className="buttons">
+                                        <button>Yes</button>
+                                        <button onClick={() => setShowModal(false)}>No</button>
+                                    </div>
                                 </div>
-                            </div>
-                        </Modal> : null
+                            </Modal>) : null
                     }
                 </h2>
             </div>

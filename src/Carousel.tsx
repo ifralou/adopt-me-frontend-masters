@@ -1,6 +1,10 @@
-import React, {Component} from 'react';
+import React, {Component, MouseEvent} from 'react';
 
-class Carousel extends Component {
+interface Props {
+   images: string[]
+}
+
+class Carousel extends Component<Props> {
     state = {
         active: 0
     }
@@ -9,7 +13,11 @@ class Carousel extends Component {
         images: ["http://pets-images.dev-apis.com/pets/none.jpg"]
     }
 
-    handleIndexClick = (event) => {
+    handleIndexClick = (event: MouseEvent<HTMLElement>) => {
+        if(!(event.target instanceof HTMLElement)) {
+            return;
+        }
+
         this.setState({
             //Everything from DOM is a string.
             active: Number(event.target.dataset.index)

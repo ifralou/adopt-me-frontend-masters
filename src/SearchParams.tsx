@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
+import React, {FormEvent, useState} from 'react';
 import useBreedList from "./useBreedList";
 import Results from "./Results";
 import {useQuery} from "@tanstack/react-query";
 import {fetchSearch} from "./fetchSearch";
+import {Animal} from "../APIResponseTypes";
 
-const animals = ["", "bird", "cat", "dog", "rabbit", "reptile"];
+const animals : Animal[]= ["bird", "cat", "dog", "rabbit", "reptile"];
 
 const SearchParams = () => {
     const [requestParams, setRequestParams] = useState({
@@ -13,20 +14,20 @@ const SearchParams = () => {
         breed: ""
     });
 
-    const results = useQuery(["search", requestParams], fetchSearch);
+    const {data: { petss }}= useQuery(["search", requestParams], fetchSearch);
 
-    const [animal, setAnimal] = useState("");
+    const [animal, setAnimal] = useState<Animal>("bird");
     const [breeds, _] = useBreedList(animal);
 
-    const pets = results?.data?.pets ?? [];
+    const pets = petss ?? [];
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const formDate = new FormData(e.target);
+        const formDate = new FormData(e.currentTarget);
         const obj = {
-            animal: formDate.get("animal") || "",
-            breed: formDate.get("breed") || "",
-            location: formDate.get("location") || ""
+            animal: formDate.get("animal")?.toString() || "",
+            breed: formDate.get("breed")?.toString() || "",
+            location: formDate.get("location")?.toString() || ""
         };
         setRequestParams(obj);
     };
@@ -44,7 +45,7 @@ const SearchParams = () => {
                     Animal
                     <select id="animal"
                             value={animal}
-                            onChange={e => setAnimal(e.target.value)}
+                            onChange={e => setAnimal(e.target.value as Animal)}
                             name="animal"
                     >
                         {
@@ -57,7 +58,7 @@ const SearchParams = () => {
                     Breed
                     <select id="breed" name="breed" disabled={breeds.length === 0}>
                         {
-                            breeds.map((breed, i) => <option key={i}>{breed}</option> )
+                            (breeds as string[]).map((breed: string, i: number) => <option key={i}>{breed}</option> )
                         }
                     </select>
 
