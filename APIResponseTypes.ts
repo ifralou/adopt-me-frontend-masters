@@ -4,7 +4,7 @@ export interface Pet {
     id: number,
     name: string,
     description: string,
-    animal: string,
+    animal: Animal,
     breed: string,
     images: string[],
     city: string,

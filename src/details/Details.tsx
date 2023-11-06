@@ -1,24 +1,25 @@
-import React, {useState} from 'react';
-import {useParams} from "react-router-dom";
-import {useQuery} from "@tanstack/react-query";
-import fetchPet from "../fetchPet";
+import React, { useState } from 'react';
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPet } from "../fetchPet";
 import Carousel from "../Carousel";
 import Modal from "../../Modal";
-import {PetApiResponse} from "../../APIResponseTypes";
 
 const Details = () => {
     const {id} = useParams();
 
-    const results = useQuery<PetApiResponse>(["details", id], fetchPet);
+    const results  = useQuery(["details", id], fetchPet);
+
     const [showModal, setShowModal] = useState<boolean>(false);
 
     if (results.isLoading) {
         return <div className="loading-pane">
-            <h2 className="loader">:tofu:</h2>
+            <h2 className="loader">🫓</h2>
         </div>
     }
 
     const pet = results?.data?.pets[0];
+
     if (!pet) {
         throw new Error("No pet lol");
     }

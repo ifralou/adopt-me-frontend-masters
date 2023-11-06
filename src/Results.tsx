@@ -1,12 +1,16 @@
 import React from 'react';
 import Pet from "./Pet";
+import {Pet as PetApi} from "../APIResponseTypes";
 
-const Results = ({pets}) => {
+type ResultsProps = {
+    pets: PetApi[]
+}
+const Results = ({pets}: ResultsProps) => {
 
     return (
         <div className="search">
             {
-                !pets.length ?
+                !pets?.length ?
                     <h1>No pets found</h1> :
                     pets.map(pet =>
                         <Pet

@@ -14,12 +14,12 @@ const SearchParams = () => {
         breed: ""
     });
 
-    const {data: { petss }}= useQuery(["search", requestParams], fetchSearch);
-
     const [animal, setAnimal] = useState<Animal>("bird");
     const [breeds, _] = useBreedList(animal);
 
-    const pets = petss ?? [];
+    const response = useQuery(["search", requestParams], fetchSearch);
+
+    const pets = response?.data?.pets || [];
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
